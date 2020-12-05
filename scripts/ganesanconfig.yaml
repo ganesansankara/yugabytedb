@@ -1,0 +1,16 @@
+ganesan-db:
+    dbname: ganesan-postgres
+    host: 192.168.1.122
+    #host: 172.17.0.1
+    port: 5432
+    user: ganesan
+    password: password1
+    jdbcurl: jdbc:postgresql://172.17.0.1:5432/ganesan-postgres
+ganesan-dremio:
+    host: 192.168.1.122
+    #host: 172.17.0.1
+    port: 9047
+    odbcjdbcport: 31010
+    user: ganesan
+    password: password1
+    jdbcurl: jdbc:dremio:direct=172.17.0.1:31010
