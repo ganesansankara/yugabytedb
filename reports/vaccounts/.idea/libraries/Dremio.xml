@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Dremio">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/dremio-jdbc-driver-4.1.4-202001240912140359-a90eb503.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

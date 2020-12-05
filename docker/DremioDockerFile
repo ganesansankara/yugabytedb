@@ -1,0 +1,7 @@
+
+FROM dremio/dremio-oss:latest
+
+#COPY ../target/dremio-flight-connector-0.11.0-SNAPSHOT-shaded.jar /opt/dremio/jars/
+EXPOSE 9047 31010 45678 47470
+#ENV JAVA_EXTRA_OPTS="$JAVA_EXTRA_OPTS -Ddremio.flight.host=0.0.0.0"
+ENTRYPOINT ["bin/dremio", "start-fg"]

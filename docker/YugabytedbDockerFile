@@ -1,0 +1,5 @@
+
+
+FROM yugabytedb/yugabyte:latest
+EXPOSE 5432 9042 9000 7000
+#ENTRYPOINT ["bin/postgres", "start-fg"]

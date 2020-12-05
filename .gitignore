@@ -1,0 +1,5 @@
+target
+*.class
+**/*.jasper
+__pycache__
+
