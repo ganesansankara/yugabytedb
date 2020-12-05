@@ -14,19 +14,27 @@ try:
 except psycopg2.Error as e:
     print ( "ERROROCCURED",e.pgerror)
     conn.rollback()
+conn.commit()
 
-    
+#    acct_no character varying(100)  NOT NULL  
 try:
     print ("Creating schema****")
     cur.execute("""
 CREATE TABLE accounts (
-    acct_no character varying(100)  NOT NULL
+
+    acct_no VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    balance NUMERIC(15,2) NOT NULL,
+    delete_flag VARCHAR(1) NOT NULL,
+    version_no NUMERIC(10) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
     )
     """)
 except psycopg2.Error   as e:
     print ( "ERROROCCURED",e.pgerror)
     conn.rollback()
-
+conn.commit()
 try:
     print ("Creating Index****")
     cur.execute("""
