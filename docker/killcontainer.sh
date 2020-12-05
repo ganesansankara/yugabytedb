@@ -27,4 +27,4 @@ ${PS_CMD}
 }
 
 #kill_one "ganesan-postgres"
-kill_all ()
+kill_all

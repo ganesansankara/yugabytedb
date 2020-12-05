@@ -8,7 +8,7 @@ MYIPADDR=`hostname -I | awk '{print $1}'`
 echo MYIPADDR=${MYIPADDR}
 
 yugabytedb_setup () {
-#Postgres
+#Yugabytedb
 
 #sudo rm -rf ~/.local/*
 #Make persitent volume so data survives in restarts
@@ -17,10 +17,12 @@ PVOL=$HOME/Ganesan/docker/volumes/yugabyte
 mkdir -p ${PVOL}
 
 
-${DOCKER_CMD} build --tag ganesan-yugabyte --file ./YugabytedbDockerFile .
-${DOCKER_CMD} run -d --name ganesan-yugabyte -p 5432:5432 -p 9187:9187 -v ${PVOL}:/home/yugabyte/var -e POSTGRES_DB=ganesan-yugabyte  -e POSTGRES_USER=ganesan -e POSTGRES_PASSWORD=password1  ganesan-yugabyte
+#${DOCKER_CMD} build --tag ganesan-yugabyte --file ./YugabytedbDockerFile .
+#${DOCKER_CMD} run -d --name ganesan-yugabyte -p7000:7000 -p9000:9000 -p5433:5433 -p9042:9042  ganesan-yugabyte
+#${DOCKER_CMD} run -d --name ganesan-yugabyte -p7000:7000 -p9000:9000 -p5433:5433 -p9042:9042 -v ${PVOL}:/home/yugabyte/var -e POSTGRES_DB=ganesan-yugabyte  -e POSTGRES_USER=ganesan -e POSTGRES_PASSWORD=password1  ganesan-yugabyte
+${DOCKER_CMD} run -d --name ganesan-yugabyte  -p7000:7000 -p9000:9000 -p5433:5433 -p9042:9042 -v ${PVOL}:/home/yugabyte/var yugabytedb/yugabyte:latest bin/yugabyted start --daemon=false
 
-${DOCKER_CMD} start ganesan-yugabyte
+#${DOCKER_CMD} start ganesan-yugabyte
 #${DOCKER_CMD} exec -it ganesan-postgres bash
 
 
