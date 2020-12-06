@@ -13,7 +13,7 @@ yugabytedb_setup () {
 #sudo rm -rf ~/.local/*
 #Make persitent volume so data survives in restarts
 PVOL=$HOME/Ganesan/docker/volumes/yugabyte
-#sudo rm -rf ${PVOL}
+sudo rm -rf ${PVOL}
 mkdir -p ${PVOL}
 
 

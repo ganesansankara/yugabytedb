@@ -1,4 +1,4 @@
-#import psycopg2
+import psycopg2
 import config
 import pyodbc
 
@@ -10,24 +10,34 @@ def postgres_connect():
         print(section)
     print(cfg['ganesan-db'])
 
-    #connstring=f'host={cfg["ganesan-db"]["host"]} port={cfg["ganesan-db"]["port"]} \
-     #dbname={cfg["ganesan-db"]["dbname"]} \
-     #user={cfg["ganesan-db"]["user"]}  \
-     #password={cfg["ganesan-db"]["password"]}'
-     #conn = psycopg2.connect(connstring)
 
-    
-    connstring = (
-    "DRIVER={PostgreSQL Unicode};"
-    f'DATABASE={cfg["ganesan-db"]["dbname"]};'
-    f'UID={cfg["ganesan-db"]["user"]};'
-    f'PWD={cfg["ganesan-db"]["password"]};'
-    f'SERVER={cfg["ganesan-db"]["host"]};'
-    f'PORT={cfg["ganesan-db"]["port"]};'
-    )
-    print(connstring)
+    bUsepyodbcConnect=False
 
-    conn = pyodbc.connect(connstring)
+    if ( bUsepyodbcConnect == False):
+
+        connstring=f'host={cfg["ganesan-db"]["host"]} port={cfg["ganesan-db"]["port"]} \
+        dbname={cfg["ganesan-db"]["dbname"]} \
+        user={cfg["ganesan-db"]["user"]}  \
+        password={cfg["ganesan-db"]["password"]}'
+        
+        print(connstring)
+        conn = psycopg2.connect(connstring)
+        conn.autocommit = False # disable autocommit
+    else :    
+
+        connstring = (
+        "DRIVER={PostgreSQL Unicode};"
+        f'DATABASE={cfg["ganesan-db"]["dbname"]};'
+        f'UID={cfg["ganesan-db"]["user"]};'
+        f'PWD={cfg["ganesan-db"]["password"]};'
+        f'SERVER={cfg["ganesan-db"]["host"]};'
+        f'PORT={cfg["ganesan-db"]["port"]};'
+        )
+        print(connstring)
+
+        conn = pyodbc.connect(connstring,autocommit=False)
+        conn.autocommit = False # disable autocommit
+
     return conn
 
 def dremio_connect():

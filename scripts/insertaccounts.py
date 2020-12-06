@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import psycopg2,sys
 import db
 import utils
@@ -18,8 +16,7 @@ def commit_recs(conn,cur,start_time):
 def insert_recs():
     conn = db.postgres_connect()
     cur = conn.cursor()
-
-    ins_stmt = "INSERT INTO accounts ( acct_no, name, balance,version_no,delete_flag,created_at,updated_at) VALUES(?,?,?,?,?, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)"
+    ins_stmt = "INSERT INTO accounts ( acct_no, name, balance,version_no,delete_flag,created_at,updated_at) VALUES(%s,%s,%s,%s,%s, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)"
     acct_fmt=prefix+"acct-{:03d}"
     acct=''
     name=''
@@ -37,7 +34,7 @@ def insert_recs():
                 acct=acct_fmt.format(idx)
                 name = f'AcctName-{acct}'
                 balance=10000.99+(idx*10);
-                print (prefix, acct,name,balance)
+                print (f'inserting={acct},{name},{balance}')
             
             cur.execute (ins_stmt, (acct,name, balance,1,'N'))
             
