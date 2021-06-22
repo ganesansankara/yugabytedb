@@ -7,6 +7,20 @@ PS_CMD="${DOCKER_CMD} ps -a"
 MYIPADDR=`hostname -I | awk '{print $1}'`
 echo MYIPADDR=${MYIPADDR}
 
+exasol_setup () {
+#Exasol
+
+#sudo rm -rf ~/.local/*
+#Make persitent volume so data survives in restarts
+PVOL=$HOME/Ganesan/docker/volumes/exasol
+sudo rm -rf ${PVOL}
+mkdir -p ${PVOL}
+
+${DOCKER_CMD} run --platform linux/amd64 -it --name exasoldb  -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} exasol/docker-db:latest
+
+
+${PS_CMD}
+}
 yugabytedb_setup () {
 #Yugabytedb
 
@@ -124,5 +138,6 @@ ${PS_CMD}
 #dremio_setup
 #rabbitmq_setup
 #minio_setup
-yugabytedb_setup
+#yugabytedb_setup
+exasol_setup
 
