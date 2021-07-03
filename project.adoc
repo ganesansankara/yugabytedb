@@ -1,0 +1,73 @@
+= Document Title
+:icons:
+
+.CSV data, 15% each column
+[format="csv",width="60%",cols="4"]
+[frame="topbot",grid="none"]
+|======
+1,2,3,4
+a,b,c,d
+A,B,C,D
+|======
+
+. OS
+.. Windows
+.. Ubuntu
+. JVM,
+. App server
+. Application with its configuration
+
+icon:comment[] This is a comment icon
+
+icon:file[] And a file icon
+
+icon:battery-full[] And a battery icon
+
+= The First Asciidoc example: Subtitle                              
+Lars Vogel(c) 2016 vogella GmbH                                     
+Version 0.2, 17.12.2015                                             
+:sectnums:                                                          
+:toc:                                                               
+:toclevels: 4                                                       
+:toc-title: My Content                                              
+                                                                    
+:description: Example AsciiDoc document                             
+:keywords: AsciiDoc                                                 
+:imagesdir: ./img                                                   
+
+This is the optional preamble (an untitled section body). Useful for
+writing simple sectionless documents consisting only of a preamble.
+
+== First section
+
+Some text
+
+== Second section
+
+More test
+
+== Third section
+
+== g
+
+= My Article
+J. Smith
+
+https://wikipedia.org[Wikipedia] is an
+on-line encyclopaedia, available in
+English and *many* other languages.
+
+== Software
+
+You can install 'package-name' using
+the `gem` command:
+
+ gem install package-name
+
+== Hardware
+
+Metals commonly used include:
+
+* copper
+* tin
+* lead

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/exasol-yugabytedb.iml" filepath="$PROJECT_DIR$/.idea/exasol-yugabytedb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdbc/ganesan-quarkus.iml" filepath="$PROJECT_DIR$/jdbc/ganesan-quarkus.iml" />
     </modules>
   </component>
 </project>
