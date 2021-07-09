@@ -31,6 +31,7 @@ public class JdbcHelper {
 
     public static Connection getConnection() throws SQLException {
        Connection connection = DriverManager.getConnection(url, userName, password);
+       connection.setAutoCommit(false);
         return connection;
     }
 
