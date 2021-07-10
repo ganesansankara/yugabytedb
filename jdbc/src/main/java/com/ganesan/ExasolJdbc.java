@@ -1,29 +1,48 @@
 package com.ganesan;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.ganesan.utils.ConfigHelper;
 import com.ganesan.utils.JdbcHelper;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import java.sql.*;
 
 public class ExasolJdbc {
 
-    @ConfigProperty(name = "database.driver")
-    private static  String dbDriver="XX";
+    private String dbDriver;
 
-    @ConfigProperty(name = "database.url")
-    private static String dbURL="XX";
+    private String dbURL;
 
-    @ConfigProperty(name = "database.user")
-    private static String dbUser="XX";
+    private String dbUser;
 
-    @ConfigProperty(name = "database.password")
-    private static String dbPassword="XX";
+    private String dbPassword;
 
-    @ConfigProperty(name = "database.batchsize")
-    private static  int dbBatchSize;
+    private int dbBatchSize;
 
-    private static void setSchema(final Connection conn) throws SQLException {
+    private Connection conn;
+
+    private void init() throws SQLException {
+
+        dbDriver = ConfigHelper.getConfig("database.driver", "XX");
+        dbURL = ConfigHelper.getConfig("database.url", "XX");
+        dbUser = ConfigHelper.getConfig("database.user", "XX");
+        dbPassword = ConfigHelper.getConfig("database.password", "XX");
+        dbBatchSize = Integer.parseInt(ConfigHelper.getConfig("database.batchsize", "1000"));
+
+        JdbcHelper.setConnectionProperties(dbDriver, dbURL, dbUser, dbPassword);
+        conn = JdbcHelper.getConnection();
+
+        setSchema();
+
+    }
+
+    private void closeAll() {
+        JdbcHelper.closeConnection(conn);
+    }
+
+    private void setSchema() throws SQLException {
 
         String ddlStatementsList[] = {
 
@@ -37,7 +56,7 @@ public class ExasolJdbc {
 
     }
 
-    private static void showSystemCatalog(Connection conn) {
+    private void showSystemCatalog() {
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
@@ -55,9 +74,8 @@ public class ExasolJdbc {
         }
     }
 
-    private static void createSchema(final Connection conn, boolean dropschema) throws SQLException {
+    private void createSchema(boolean dropschema) throws SQLException {
 
-        setSchema(conn);
         if (dropschema) {
             executeDDLStatement(conn, "DROP TABLE IF EXISTS accounts");
 
@@ -70,10 +88,7 @@ public class ExasolJdbc {
 
     }
 
-    private static void populateTable(Connection conn, String prefix, int maxrecs) {
-
-        PreparedStatement pstmt = null;
-
+    private void countTable() throws SQLException {
         String selectStatementsList[] = {
 
                 // "CREATE SCHEMA IF NOT EXISTS GANESAN",
@@ -81,12 +96,21 @@ public class ExasolJdbc {
                 // "OPEN SCHEMA PUB3715",
                 "SELECT COUNT(1) FROM accounts", };
 
-        try {
-            setSchema(conn);
-            for (String st : selectStatementsList) {
+        for (String st : selectStatementsList) {
 
-                executeSelectStatement(conn, st);
-            }
+            executeSelectStatement(conn, st);
+        }
+        conn.commit();
+
+    }
+
+    private void populateTable(String prefix, int maxrecs) {
+
+        PreparedStatement pstmt = null;
+
+        try {
+
+            countTable();
 
             pstmt = conn.prepareStatement(
                     "INSERT INTO accounts ( acct_no, name, balance,version_no,delete_flag,created_at,updated_at) "
@@ -114,7 +138,7 @@ public class ExasolJdbc {
                 // System.out.printf("INSERT RETURNED=%d%n", ret);
 
                 bCommit = true;
-                if (idx % BATCH_SIZE == 0) {
+                if (idx % dbBatchSize == 0) {
 
                     int ret[] = pstmt.executeBatch();
 
@@ -130,21 +154,18 @@ public class ExasolJdbc {
                 pstmt.executeBatch();
                 conn.commit();
                 System.out.printf("Finished=%s,%d%n", prefix, maxrecs);
+                countTable();
             }
+            countTable();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             JdbcHelper.closeStatement(pstmt);
         }
 
-        for (String st : selectStatementsList) {
-
-            executeSelectStatement(conn, st);
-        }
-
     }
 
-    private static void executeDDLStatement(Connection conn, String st) {
+    private void executeDDLStatement(Connection conn, String st) {
         System.out.printf("Executing %s\n", st);
         Statement stmt = null;
         try {
@@ -160,7 +181,7 @@ public class ExasolJdbc {
 
     }
 
-    private static void executeSelectStatement(Connection conn, String st) {
+    private void executeSelectStatement(Connection conn, String st) {
         System.out.printf("Executing %s\n", st);
         Statement stmt = null;
         try {
@@ -184,31 +205,29 @@ public class ExasolJdbc {
 
     }
 
-    public static void main(String[] args) {
-
-        JdbcHelper.setConnectionProperties(dbDriver, dbURL, dbUser, dbPassword);
-
-        Connection conn = null;
+    public static void main(String... args) {
 
         String prefix = args[0];
+        ExasolJdbc myJDBC = new ExasolJdbc();
 
         try {
 
-            conn = JdbcHelper.getConnection();
+            myJDBC.init();
 
             if ("createschema".equals(prefix)) {
-                createSchema(conn, true);
-                showSystemCatalog(conn);
+                myJDBC.createSchema(true);
+                myJDBC.showSystemCatalog();
             } else {
                 int maxrecs = Integer.valueOf(args[1]);
-                populateTable(conn, prefix, maxrecs);
+                myJDBC.populateTable(prefix, maxrecs);
             }
         } catch (
 
         SQLException e) {
             e.printStackTrace();
         } finally {
-            JdbcHelper.closeConnection(conn);
+            myJDBC.closeAll();
+            ;
         }
     }
 }

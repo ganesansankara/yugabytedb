@@ -2,5 +2,5 @@
 set -x
 
 
-mvn  exec:java -Dexec.mainClass="com.ganesan.ExasolJdbc" -Dexec.args="createschema"
+mvn exec:java -Dexec.mainClass="com.ganesan.ExasolJdbc" -Dexec.args="createschema"
 
