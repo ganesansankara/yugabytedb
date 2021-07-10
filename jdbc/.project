@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>reprts</name>
+	<name>ganesan-quarkus</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1625921896344</id>
+			<id>1625921896342</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

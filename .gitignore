@@ -2,4 +2,5 @@ target
 *.class
 **/*.jasper
 __pycache__
+.DS_Store
 

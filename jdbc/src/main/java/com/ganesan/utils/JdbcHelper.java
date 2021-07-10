@@ -18,6 +18,10 @@ public class JdbcHelper {
       url = URL;
       userName = UserName;
       password = Password;
+
+      System.out.printf ("DB Driver=%s, URL=%s, User=%s, Password=%s%n", driverName, url, userName,  password);
+      loadDriver();
+      
     }
 
     private static void loadDriver () {
