@@ -51,7 +51,7 @@ PVOL=$HOME/Ganesan/docker/volumes/exasol
 sudo rm -rf ${PVOL}
 mkdir -p ${PVOL}
 ${DOCKER_CMD} build --platform linux/amd64  --tag ${cname} --file ./ExasolDockerFile .
-${DOCKER_CMD} run --platform linux/amd64 -d --name ${cname} -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} ${cname} 
+${DOCKER_CMD} run --platform linux/amd64 -it --name ${cname} -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} ${cname} 
 
 ${DOCKER_CMD} start ${cname} 
 #${DOCKER_CMD} run --platform linux/amd64 -it --name ${cname}  -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} exasol/docker-db:latest
