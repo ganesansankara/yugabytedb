@@ -48,7 +48,6 @@ public class ExasolJdbc {
 
                 // "CREATE SCHEMA IF NOT EXISTS GANESAN",
                 "SELECT CURRENT_USER", "OPEN SCHEMA PUB3715", };
-        Statement stmt = null;
         for (String st : ddlStatementsList) {
 
             executeDDLStatement(conn, st);
