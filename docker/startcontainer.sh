@@ -7,16 +7,54 @@ PS_CMD="${DOCKER_CMD} ps -a"
 MYIPADDR=`hostname -I | awk '{print $1}'`
 echo MYIPADDR=${MYIPADDR}
 
+
+superset_setup () {
+
+cname=ganesan-superset
+#Superset
+${DOCKER_CMD} build --platform linux/amd64  --tag ${cname} --file ./SuperSetDockerFile .
+${DOCKER_CMD} run --platform linux/amd64 -d --name ${cname}  -p 8080:8088 ${cname} 
+
+${DOCKER_CMD} start ${cname} 
+
+#${DOCKER_CMD} run --platform linux/amd64 -d -p 8080:8088 --name superset apache/superset
+${DOCKER_CMD} exec -it ${cname}  superset fab create-admin \
+               --username admin \
+               --password admin \
+               --firstname Superset \
+               --lastname Admin \
+               --email admin@superset.com 
+
+#Migrate local DB to latest
+${DOCKER_CMD}  exec -it ${cname}  superset db upgrade
+
+#Setup roles
+${DOCKER_CMD}  exec -it ${cname}  superset init
+
+#Load Examples
+${DOCKER_CMD}  exec -it ${cname}  superset init
+
+
+${PS_CMD}
+
+http://localhost:8080/login/
+
+
+}
+
 exasol_setup () {
 #Exasol
-
+cname=ganesan-exasol
 #sudo rm -rf ~/.local/*
 #Make persitent volume so data survives in restarts
 PVOL=$HOME/Ganesan/docker/volumes/exasol
 sudo rm -rf ${PVOL}
 mkdir -p ${PVOL}
+${DOCKER_CMD} build --platform linux/amd64  --tag ${cname} --file ./ExasolDockerFile .
+${DOCKER_CMD} run --platform linux/amd64 -d --name ${cname} -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} ${cname} 
 
-${DOCKER_CMD} run --platform linux/amd64 -it --name exasoldb  -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} exasol/docker-db:latest
+${DOCKER_CMD} start ${cname} 
+#${DOCKER_CMD} run --platform linux/amd64 -it --name ${cname}  -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} exasol/docker-db:latest
 
 
 ${PS_CMD}
@@ -140,4 +178,5 @@ ${PS_CMD}
 #minio_setup
 #yugabytedb_setup
 exasol_setup
+#superset_setup
 
