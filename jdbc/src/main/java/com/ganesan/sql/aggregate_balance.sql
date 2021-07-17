@@ -1,5 +1,4 @@
-SELECT  REGEXP_SUBSTR(a.ACCT_NO,'[a-z0-9._%+]+-')  FROM ACCOUNTS a 
-
+SELECT  REGEXP_SUBSTR(a.ACCT_NO,'[a-z0-9._%+]+-')  FROM ACCOUNTS a  ORDER BY a.UPDATED_AT DESC 
 
 
 SELECT
@@ -7,7 +6,7 @@ SELECT
 FROM
 	(
 	SELECT
-		count(1) AS cnt 
+		count(1) AS cnt,
 		b.acct_init,
 		sum (b.balance) AS balsum,
 		min(b.balance) AS balmin,

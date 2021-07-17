@@ -12,7 +12,7 @@ RUN pip3 install --upgrade pip
 RUN pip3 install --upgrade pyodbc
 RUN pip3 install --upgrade pyexasol
 RUN pip3 install --upgrade sqlalchemy-exasol
-RUN pip3 install --upgrade pybind11 boost sqlalchemy-exasol[turbodbc]
+#RUN pip3 install --upgrade pybind11 boost sqlalchemy-exasol[turbodbc]
 USER superset
 EXPOSE 8088 
 #ENTRYPOINT ["/bin/bash", ""]
