@@ -14,9 +14,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.exasol:exasol-jdbc:7.0.7" level="project" />
     <orderEntry type="library" name="Maven: com.exasol:spark-connector_2.12:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.exasol:sql-statement-builder-java8:4.4.1" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-jdbc-h2:1.13.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.h2database:h2:1.4.197" level="project" />
-    <orderEntry type="library" name="Maven: org.locationtech.jts:jts-core:1.15.0" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy:1.13.7.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-vertx-http:1.13.7.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-security-runtime-spi:1.13.7.Final" level="project" />

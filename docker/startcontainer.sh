@@ -12,6 +12,8 @@ superset_setup () {
 
 cname=ganesan-superset
 #Superset
+# Add Exasol database driver
+echo "exasol" > requirements-local.txt
 ${DOCKER_CMD} build --platform linux/amd64  --tag ${cname} --file ./SuperSetDockerFile .
 ${DOCKER_CMD} run --platform linux/amd64 -d --name ${cname}  -p 8080:8088 ${cname} 
 
@@ -31,9 +33,6 @@ ${DOCKER_CMD}  exec -it ${cname}  superset db upgrade
 #Setup roles
 ${DOCKER_CMD}  exec -it ${cname}  superset init
 
-#Load Examples
-${DOCKER_CMD}  exec -it ${cname}  superset init
-
 
 ${PS_CMD}
 
@@ -50,6 +49,8 @@ cname=ganesan-exasol
 PVOL=$HOME/Ganesan/docker/volumes/exasol
 sudo rm -rf ${PVOL}
 mkdir -p ${PVOL}
+
+
 ${DOCKER_CMD} build --platform linux/amd64  --tag ${cname} --file ./ExasolDockerFile .
 ${DOCKER_CMD} run --platform linux/amd64 -it --name ${cname} -p 9563:8563 --privileged --stop-timeout 120 -v exa_volume:${PVOL} ${cname} 
 
@@ -177,6 +178,6 @@ ${PS_CMD}
 #rabbitmq_setup
 #minio_setup
 #yugabytedb_setup
-exasol_setup
-#superset_setup
+#exasol_setup
+superset_setup
 
