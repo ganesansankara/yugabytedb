@@ -10,10 +10,31 @@ echo MYIPADDR=${MYIPADDR}
 
 superset_setup () {
 
+#Clone Superset's Github repository
+#Clone Superset's repo in your terminal with the following command:
+
+#git clone https://github.com/apache/superset.git
+#Once that command completes successfully, you should see a new superset folder in your current directory.
+
+#3. Launch Superset Through Docker Compose
+#Navigate to the folder you created in step 1:
+
+# cd superset
+#Then, run the following command:
+#touch ./docker/requirements-local.txt
+#echo exasol > ./docker/requirements-local.txt
+#Rebuild your local image with the new driver baked in:
+#docker-compose build --platform linux/amd64 --force-rm
+#docker-compose --platform linux/amd64  -f docker-compose-non-dev.yml up
+
+
 cname=ganesan-superset
 #Superset
 # Add Exasol database driver
-echo "exasol" > requirements-local.txt
+cat <<!GG > requirements-local.txt
+pip
+sqlalchemy-exasol[sqlalchemy]
+!GG
 ${DOCKER_CMD} build --platform linux/amd64  --tag ${cname} --file ./SuperSetDockerFile .
 ${DOCKER_CMD} run --platform linux/amd64 -d --name ${cname}  -p 8080:8088 ${cname} 
 
