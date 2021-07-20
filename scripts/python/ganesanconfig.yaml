@@ -1,3 +1,13 @@
+ganesan-exasol:
+    dbname: exasol
+    host: DEMODB.EXASOL.COM
+    #host: 172.17.0.1
+    port: 8563
+    user: PUB3715
+    password: NbMCCidzA
+    jdbcurl: jdbc:exa:DEMODB.EXASOL.COM:8563;schema=PUB3715
+    jdbc_batchsize: 1000
+
 ganesan-db:
     dbname: yugabyte
     host: 192.168.18.2

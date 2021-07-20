@@ -44,13 +44,17 @@ public class JasperReportExporterTest {
         // SimpleReportFiller simpleReportFiller = new SimpleReportFiller();
 
         ArrayList<String> sqlParams = new ArrayList<String>();
-        sqlParams.add("init1acct-00");
+        sqlParams.add("gan9-");
 
-        ExtractJDBCToJSon("ganesan-db", "SELECT * FROM ACCOUNTS WHERE ACCT_NO=?", sqlParams, "vaccounts-postgres.json");
+        ExtractJDBCToJSon("ganesan-exasol",
+                "SELECT * FROM ACCOUNTS a WHERE REGEXP_SUBSTR(a.ACCT_NO,'[a-z0-9._%+]+-') = ?", sqlParams,
+                "vaccounts-exasol.json");
 
-        ExtractJDBCToJSon("ganesan-dremio", "SELECT * FROM s2b.vaaccounts.vds_reports WHERE ACCT_NO=?", sqlParams, "vaccounts-dremio.json");
+        // ExtractJDBCToJSon("ganesan-db", "SELECT * FROM ACCOUNTS WHERE ACCT_NO=?",
+        // sqlParams, "vaccounts-postgres.json");
 
-        
+        // ExtractJDBCToJSon("ganesan-dremio", "SELECT * FROM s2b.vaaccounts.vds_reports
+        // WHERE ACCT_NO=?", sqlParams, "vaccounts-dremio.json");
 
         /*
          * SimpleReportExporter simpleExporter = new SimpleReportExporter();
@@ -64,28 +68,38 @@ public class JasperReportExporterTest {
 
     }
 
-    private static void ExtractJDBCToJSon(final String dbconfig, final String sql, final ArrayList<String> SqlParams, final String outFileName)
-            throws SQLException, FileNotFoundException, JRException {
-      
+    private static void ExtractJDBCToJSon(final String dbconfig, final String sql, final ArrayList<String> SqlParams,
+            final String outFileName) throws SQLException, FileNotFoundException, JRException {
+
+        long currentTime = 0L;
 
         final Connection conn = JdbcUtil.getJdbcDataSource(dbconfig);
-
+        currentTime = System.currentTimeMillis();
         final ResultSet rs = JdbcUtil.getResultSet(conn, sql, SqlParams);
         final String outFullFileName = "/tmp/" + outFileName;
 
         final FileOutputStream fos = new FileOutputStream(outFullFileName);
 
         final StreamingJsonResultSetExtractor jsonStream = new StreamingJsonResultSetExtractor(fos);
-        jsonStream.extractData(rs);
+        long rowcount = jsonStream.extractData(rs);
+        System.out.printf("Generation of JDBC to JSON File: Elapsed Time=%d (ms), Total ROWS=%d%n",
+                System.currentTimeMillis() - currentTime, rowcount);
         JdbcUtil.close(rs);
         JdbcUtil.close(conn);
 
         final HashMap<String, Object> ReportParams = new HashMap<>();
         ReportParams.put("title", "Employee Report Example");
         ReportParams.put("minSalary", 15000.0);
-		final JRDataSource jrd = new JsonDataSource(new FileInputStream(outFullFileName));
+
+        final JRDataSource jrd = new JsonDataSource(new FileInputStream(outFullFileName));
+
+        currentTime = System.currentTimeMillis();
+
         JasportReportExporter.generateReport(jrd,
-         "/home/ganesh/Ganesan/MyOwn/dremiopostgres/reports/vaccounts/src/reports/vaaccounts.jrxml",
-         "/tmp/vaaccounts.pdf", ReportParams);
+                "/Users/sankaraganesan/MyOwn/exasol-yugabytedb/reports/vaccounts/src/resources/reports/vaaccounts.jrxml",
+                "/tmp/vaaccounts.pdf", ReportParams);
+
+        System.out.printf("Generation of PDF from JSON File: Elapsed Time=%d (ms)%n",
+                System.currentTimeMillis() - currentTime);
     }
 }

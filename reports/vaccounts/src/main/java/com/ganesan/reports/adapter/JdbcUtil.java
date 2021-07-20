@@ -25,8 +25,8 @@ public class JdbcUtil {
         System.out.println("jdbcurl=" + url);
 
         final Properties pr = new Properties();
-        pr.setProperty("user", "ganesan");
-        pr.setProperty("password", "password1");
+        pr.setProperty("user", (String) dbconf.get("user"));
+        pr.setProperty("password", (String) dbconf.get("password"));
         pr.setProperty("ssl", "false");
 
         final Connection con = DriverManager.getConnection(url, pr);

@@ -9,7 +9,7 @@ import org.yaml.snakeyaml.Yaml;
 
 public class Config {
     private static Config INSTANCE = null;
-    private static String CONFIG_FILE = "/home/ganesh/Ganesan/MyOwn/dremiopostgres/scripts/ganesanconfig.yaml";
+    private static String CONFIG_FILE = "/Users/sankaraganesan/MyOwn/exasol-yugabytedb/scripts/python/ganesanconfig.yaml";
 
     public static Config getInstance() throws FileNotFoundException {
         if (INSTANCE == null) {

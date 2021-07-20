@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  * @author Ganesan
  */
-public class StreamingJsonResultSetExtractor implements ResultSetExtractor<Void> {
+public class StreamingJsonResultSetExtractor implements ResultSetExtractor<Long> {
 
   private OutputStream os = null;
 
@@ -30,15 +30,16 @@ public class StreamingJsonResultSetExtractor implements ResultSetExtractor<Void>
   }
 
   @Override
-  public Void extractData(final ResultSet rs) {
+  public Long extractData(final ResultSet rs) {
 
     final ObjectMapper objectMapper = new ObjectMapper();
     JsonGenerator jg = null;
+    long rowcount = 0L;
 
     try {
 
       jg = objectMapper.getFactory().createGenerator(os, JsonEncoding.UTF8);
-      writeResultSetToJson(rs, jg);
+       rowcount =writeResultSetToJson(rs, jg);
       jg.flush();
 
     } catch (IOException | SQLException e) {
@@ -48,27 +49,37 @@ public class StreamingJsonResultSetExtractor implements ResultSetExtractor<Void>
       JdbcUtil.close(os);
     }
 
-    return null;
+    return rowcount;
 
   }
 
  
 
-  private void writeResultSetToJson(final ResultSet rs, final JsonGenerator jg) throws SQLException, IOException {
+  private long writeResultSetToJson(final ResultSet rs, final JsonGenerator jg) throws SQLException, IOException {
     final ResultSetMetaData rsmd = rs.getMetaData();
     final int columnCount = rsmd.getColumnCount();
+    long rowcount = 0L;
+    System.out.printf("COLumn Count%d%n", columnCount);
 
     jg.writeStartArray();
 
     while (rs.next()) {
+      rowcount++;
+
       jg.writeStartObject();
       for (int i = 1; i <= columnCount; i++) {
         jg.writeObjectField(rsmd.getColumnName(i), rs.getObject(i));
+        //System.out.printf("COL Name=%s, Value=%s%n", rsmd.getColumnName(i), ""+rs.getObject(i));
       }
       jg.writeEndObject();
     }
 
+    
     jg.writeEndArray();
+
+    System.out.printf("Total Rows from JDBC to JSON=%d%n", rowcount);
+
+    return rowcount;
 
   }
 }
