@@ -1,13 +1,10 @@
 package com.ganesan.reports.adapter;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -18,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  * @author Ganesan
  */
-public class StreamingJsonResultSetExtractor implements ResultSetExtractor<Long> {
+public class StreamingJsonResultSetExtractor  {
 
   private OutputStream os = null;
 
@@ -29,7 +26,6 @@ public class StreamingJsonResultSetExtractor implements ResultSetExtractor<Long>
     this.os = os;
   }
 
-  @Override
   public Long extractData(final ResultSet rs) {
 
     final ObjectMapper objectMapper = new ObjectMapper();
