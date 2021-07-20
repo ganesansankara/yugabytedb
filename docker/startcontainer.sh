@@ -77,8 +77,11 @@ ${DOCKER_CMD}  exec -it ${cname}  superset init
 
 ${PS_CMD}
 
-http://localhost:8080/login/
+http://${MYIPADDR}:8080/login/
 
+http://localhost:8080/login/
+# For gitpod
+gp preview http://localhost:8080
 
 }
 
