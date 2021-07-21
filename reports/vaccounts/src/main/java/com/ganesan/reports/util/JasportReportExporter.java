@@ -14,7 +14,7 @@ import net.sf.jasperreports.engine.JasperRunManager;
 
 public class JasportReportExporter {
 
-    public static String getDestinationFileName(final String srcFileName) {
+    public static String getCompiledFileName(final String srcFileName) {
         final String destFileName = srcFileName.replaceFirst(".jrxml", ".jasper");
         System.out.println("destFileName=" + destFileName);
         return destFileName;
@@ -24,7 +24,7 @@ public class JasportReportExporter {
         try {
 
             // final InputStream reportStream = FileInputSream(srcJrXMLFile);
-            final String jasperReportOutFileName = getDestinationFileName(srcJrXMLFile);
+            final String jasperReportOutFileName = getCompiledFileName(srcJrXMLFile);
 
             JasperCompileManager.compileReportToFile(srcJrXMLFile, jasperReportOutFileName);
 
@@ -36,17 +36,18 @@ public class JasportReportExporter {
         }
     }
 
-    public static void generateReport(final JRDataSource jrd, final String srcJrXMLFile, final String reportOutFile,
-            final Map<String, Object> parameters) throws IOException, JRException   {
+    public static void generateReport(final String srcJrXMLFile, final String reportOutFile,
+            final Map<String, Object> parameters, final JRDataSource jrd) throws IOException, JRException   {
         try {
 
-            final String jasperReportFile = compileReport(srcJrXMLFile);
+            //final String jasperReportFile = compileReport(srcJrXMLFile);
 
             // JasperFillManager.fillReportToFile(jasperReportFile, reportOutFile,
             // parameters,
             // getConnection());
 
-            InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(jasperReportFile);
+            System.out.printf("GENERATE REPORT - ReportXMLFile=%s, OutFile=%s%n", srcJrXMLFile, reportOutFile);
+            InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(srcJrXMLFile);
             FileOutputStream outStream = new FileOutputStream(reportOutFile);
 
             JasperRunManager.runReportToPdfStream(inStream, outStream, parameters, jrd);

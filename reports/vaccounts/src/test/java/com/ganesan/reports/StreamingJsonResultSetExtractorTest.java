@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class StreamingJsonResultSetExtractorTest {
 
-  @Test
+ // @Test
   public void testExtractData() throws SQLException, IOException {
     final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     final StreamingJsonResultSetExtractor extractor = new StreamingJsonResultSetExtractor(bos);
@@ -46,7 +46,7 @@ public class StreamingJsonResultSetExtractorTest {
         + "]")); */
   }
 
-  @Test
+  //@Test
   public void testEmptyResultSet() throws SQLException, IOException  {
     final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     final StreamingJsonResultSetExtractor extractor = new StreamingJsonResultSetExtractor(bos);

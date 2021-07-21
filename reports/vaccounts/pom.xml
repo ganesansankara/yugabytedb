@@ -86,7 +86,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
       <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -134,7 +133,58 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+		<!-- <plugin>
+			<groupId>com.alexnederlof</groupId>
+			<artifactId>jasperreports-plugin</artifactId>
+			<version>2.8</version>
+			<executions>
+				<execution>
+					<phase>process-sources</phase>
+	   				<goals>
+	      					<goal>jasper</goal>
+	   				</goals>
+	   			</execution>
+			</executions>
+			<configuration>
+				<compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
+				<sourceDirectory>${basedir}/src/main/resources/reports</sourceDirectory>
+				<outputDirectory>${project.build.directory}/reports</outputDirectory>
+				<outputFileExt>.jasper</outputFileExt>
+				<xmlValidation>true</xmlValidation>
+				<verbose>true</verbose>
+				<numberOfThreads>4</numberOfThreads>
+				<failOnMissingSourceDirectory>true</failOnMissingSourceDirectory>
+				<sourceScanner>org.codehaus.plexus.compiler.util.scan.StaleSourceScanner</sourceScanner>
+			</configuration>
+		</plugin> -->
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+<executions>
+				<execution>
+					<phase>process-sources</phase>
+	   				<goals>
+	      					<goal>run</goal>
+	   				</goals>
+	   			</execution>
+			</executions>
+                    <configuration>
+                        <target>
+                            <echo message="Start compilation of jasper reports" />
+                            <mkdir dir="${project.build.directory}/classes/reports"/>
+                            <echo message="Source = ${basedir}/src/main/resources/reports" />
+                            <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask"
+                                classpathref="maven.compile.classpath" />
+                                <jrc srcdir="${basedir}/src/main/resources/reports" destdir="${project.build.directory}/classes/reports"
+                                  xmlvalidation="true">
+                                <classpath refid="maven.compile.classpath"/>
+                                <include name="**/*.jrxml" />
+                            </jrc>
+                        </target>
+                    </configuration>
+        </plugin>
       </plugins>
-    </pluginManagement>
   </build>
 </project>

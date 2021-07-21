@@ -59,8 +59,8 @@
 		<queryString language="SQL">
 			<![CDATA[SELECT * FROM "s2b"."vaaccounts"."vds_reports"]]>
 		</queryString>
-		<field name="acct_no" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="acct_no"/>
+		<field name="ACCT_NO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="ACCT_NO"/>
 		</field>
 		<field name="name" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="name"/>
@@ -166,7 +166,7 @@
 								<textElement>
 									<font fontName="DejaVu Sans" size="12" isBold="true"/>
 								</textElement>
-								<text><![CDATA[acct_no]]></text>
+								<text><![CDATA[ACCT_NO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30"/>
@@ -177,7 +177,7 @@
 								<textElement>
 									<font fontName="DejaVu Sans" size="12"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{acct_no}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{ACCT_NO}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
