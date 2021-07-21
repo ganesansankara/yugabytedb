@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,16 +30,16 @@ public class JasperReportExporterTest {
      * Rigorous Test :-)
      * 
      * @throws SQLException
-     * @throws FileNotFoundException
      * @throws JRException
+ * @throws IOException
      */
     @Test
-    public void shouldAnswerWithTrue() throws SQLException, FileNotFoundException, JRException {
+    public void shouldAnswerWithTrue() throws SQLException, JRException, IOException {
         main(null);
         assertTrue(true);
     }
 
-    public static void main(final String[] args) throws SQLException, FileNotFoundException, JRException {
+    public static void main(final String[] args) throws SQLException, JRException, IOException {
 
         // SimpleReportFiller simpleReportFiller = new SimpleReportFiller();
 
@@ -68,7 +69,7 @@ public class JasperReportExporterTest {
     }
 
     private static void ExtractJDBCToJSon(final String dbconfig, final String sql, final ArrayList<String> SqlParams,
-            final String outFileName) throws SQLException, FileNotFoundException, JRException {
+            final String outFileName) throws SQLException, JRException, IOException {
 
         long currentTime = 0L;
 
@@ -94,8 +95,9 @@ public class JasperReportExporterTest {
 
         currentTime = System.currentTimeMillis();
 
+
         JasportReportExporter.generateReport(jrd,
-                "/Users/sankaraganesan/MyOwn/exasol-yugabytedb/reports/vaccounts/src/resources/reports/vaaccounts.jrxml",
+                "reports/vaaccounts.jrxml",
                 "/tmp/vaaccounts.pdf", ReportParams);
 
         System.out.printf("Generation of PDF from JSON File: Elapsed Time=%d (ms)%n",

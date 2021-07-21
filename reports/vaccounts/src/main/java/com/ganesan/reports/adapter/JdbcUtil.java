@@ -18,6 +18,7 @@ public class JdbcUtil {
     public static Connection getJdbcDataSource(final String dbconfig) throws SQLException, FileNotFoundException {
 
         final Map<String, Object> dbconf = (Map<String, Object>) Config.getConfig(dbconfig);
+        
         System.out.println("DBCONF" + dbconf.toString());
 
         final String url = (String) dbconf.get("jdbcurl");

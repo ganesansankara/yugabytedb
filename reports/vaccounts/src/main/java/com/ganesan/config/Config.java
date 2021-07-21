@@ -8,22 +8,30 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 public class Config {
-    
 
     private final static Map<String, Object> myConf;
 
-     static {
+    static {
+        InputStream resourceStream = null;
+        String cfile = "ganesanconfig.yaml";
 
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
-        try (InputStream resourceStream = loader.getResourceAsStream("ganesanconfig.yaml")) {
+        resourceStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(cfile);
+        if (resourceStream != null) {
             myConf = new Yaml().load(resourceStream);
-        } catch (Exception e) {
-                             myConf = null;
-            e.printStackTrace();
+        } else {
+            myConf = null;
+            System.out.printf("ERROR LOADING CONFIG FILE:%s%n", cfile);
+        }
+        if (resourceStream != null) {
+
+            try {
+                resourceStream.close();
+                resourceStream = null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-
 
     public static Map<String, Object> getConfig(String sectionName) {
         return (Map<String, Object>) myConf.get(sectionName);
