@@ -1,6 +1,6 @@
 package com.ganesan.config;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
@@ -8,42 +8,24 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 public class Config {
-    private static Config INSTANCE = null;
-    private static String CONFIG_FILE = "/Users/sankaraganesan/MyOwn/exasol-yugabytedb/scripts/python/ganesanconfig.yaml";
+    
 
-    public static Config getInstance() throws FileNotFoundException {
-        if (INSTANCE == null) {
-            synchronized (Config.class) {
-                if (INSTANCE == null) {
-                }
-                INSTANCE = new Config();
-                INSTANCE.load(CONFIG_FILE);
-            }
-        }
-        return (INSTANCE);
-    }
+    private final static Map<String, Object> myConf;
 
-    private Map<String, Object> myConf;
+     static {
 
-    private void load(final String configFileName) throws FileNotFoundException {
-        final Yaml yaml = new Yaml();
-        FileInputStream in = null;
-        try {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-            in = new FileInputStream(configFileName);
-            myConf = yaml.load(in);
-            //System.out.println(myConf.toString());
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                }
-            }
+        try (InputStream resourceStream = loader.getResourceAsStream("ganesanconfig.yaml")) {
+            myConf = new Yaml().load(resourceStream);
+        } catch (Exception e) {
+                             myConf = null;
+            e.printStackTrace();
         }
     }
 
-    public Map<String, Object> getConfig() {
-        return myConf;
+
+    public static Map<String, Object> getConfig(String sectionName) {
+        return (Map<String, Object>) myConf.get(sectionName);
     }
 }
