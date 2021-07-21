@@ -47,7 +47,7 @@ public class JasperReportExporterTest {
                 sqlParams.add("gan9-");
 
                 ExtractJDBCToJSon("ganesan-exasol",
-                                "SELECT * FROM ACCOUNTS a WHERE REGEXP_SUBSTR(a.ACCT_NO,'[a-z0-9._%+]+-') = ?",
+                                "SELECT * FROM ACCOUNTS a WHERE REGEXP_SUBSTR(a.ACCT_NO,'[a-z0-9._%+]+-') = ? LIMIT 1000",
                                 sqlParams, "vaccounts-exasol.json");
 
                 // ExtractJDBCToJSon("ganesan-db", "SELECT * FROM ACCOUNTS WHERE ACCT_NO=?",
